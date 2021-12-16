@@ -1,32 +1,29 @@
 import 'dart:io';
 
-void main() async {
-  var values = [
-    for (var line in await File('lib/day_1.txt').readAsLines())
-      if (line.isNotEmpty) int.parse(line),
-  ];
-  partOne(values);
-  partTwo(values);
-}
+final day1Values = [
+  for (var line in File('lib/day_1_input.txt').readAsLinesSync())
+    if (line.isNotEmpty) int.parse(line),
+];
 
-void partOne(List<int> values) {
-  var count = 0;
-  var last = values.first;
-  for (var value in values.skip(1)) {
-    if (value > last) count++;
-    last = value;
-  }
-  print('Part One: $count');
-}
-
-void partTwo(List<int> values) {
-  int sum(int index) => values[index] + values[index + 1] + values[index + 2];
+int day1Part1() {
+  int sum(int index) =>
+      day1Values[index] + day1Values[index + 1] + day1Values[index + 2];
   var count = 0;
   var previousSum = sum(0);
-  for (var i = 1; i < values.length - 2; i++) {
+  for (var i = 1; i < day1Values.length - 2; i++) {
     var nextSum = sum(i);
     if (nextSum > previousSum) count++;
     previousSum = nextSum;
   }
-  print('Part Two: $count');
+  return count;
+}
+
+int day1Part2() {
+  var count = 0;
+  var last = day1Values.first;
+  for (var value in day1Values.skip(1)) {
+    if (value > last) count++;
+    last = value;
+  }
+  return count;
 }
