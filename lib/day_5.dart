@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:math' as math;
 
+const day = 5;
+
 final lines = [
-  for (var line in File('lib/day_5_input.txt').readAsLinesSync())
+  for (var line in File('lib/day_${day}_input.txt').readAsLinesSync())
     if (line.isNotEmpty) Line.parse(line),
 ];
 
@@ -23,10 +25,10 @@ final maxC = () {
 }();
 
 void main() {
-  print('Day 5: Part 1: ${day5Part1()} - Part 2: ${day5Part2()}');
+  print('Day $day: Part 1: ${part1()} - Part 2: ${part2()}');
 }
 
-int day5Part1() {
+int part1() {
   var grid = List.generate(maxR, (_) => List.filled(maxC, 0));
   for (var line in lines) {
     if (line.start.r == line.end.r) {
@@ -52,7 +54,7 @@ int day5Part1() {
   return overlapCount;
 }
 
-int day5Part2() {
+int part2() {
   var grid = List.generate(maxR, (_) => List.filled(maxC, 0));
   for (var line in lines) {
     var length = math.max((line.start.r - line.end.r).abs(),

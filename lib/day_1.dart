@@ -1,15 +1,17 @@
 import 'dart:io';
 
+const day = 1;
+
 final day1Values = [
-  for (var line in File('lib/day_1_input.txt').readAsLinesSync())
+  for (var line in File('lib/day_${day}_input.txt').readAsLinesSync())
     if (line.isNotEmpty) int.parse(line),
 ];
 
 void main() {
-  print('Day 1: Part 1: ${day1Part1()} - Part 2: ${day1Part2()}');
+  print('Day $day: Part 1: ${part1()} - Part 2: ${part2()}');
 }
 
-int day1Part1() {
+int part1() {
   int sum(int index) =>
       day1Values[index] + day1Values[index + 1] + day1Values[index + 2];
   var count = 0;
@@ -22,7 +24,7 @@ int day1Part1() {
   return count;
 }
 
-int day1Part2() {
+int part2() {
   var count = 0;
   var last = day1Values.first;
   for (var value in day1Values.skip(1)) {

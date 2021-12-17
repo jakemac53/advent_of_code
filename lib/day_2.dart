@@ -1,15 +1,17 @@
 import 'dart:io';
 
+const day = 2;
+
 final day2Values = [
-  for (var line in File('lib/day_2_input.txt').readAsLinesSync())
+  for (var line in File('lib/day_${day}_input.txt').readAsLinesSync())
     if (line.isNotEmpty) Command.parse(line),
 ];
 
 void main() {
-  print('Day 2: Part 1: ${day2Part1()} - Part 2: ${day2Part2()}');
+  print('Day $day: Part 1: ${part1()} - Part 2: ${part2()}');
 }
 
-int day2Part1() {
+int part1() {
   var movement = 0;
   var depth = 0;
 
@@ -30,7 +32,7 @@ int day2Part1() {
   return movement * depth;
 }
 
-int day2Part2() {
+int part2() {
   var movement = 0;
   var depth = 0;
   var aim = 0;

@@ -1,6 +1,8 @@
 import 'dart:io';
 
-final lines = File('lib/day_4_input.txt').readAsLinesSync();
+const day = 4;
+
+final lines = File('lib/day_${day}_input.txt').readAsLinesSync();
 
 final numbers = [
   for (var num in lines.first.split(',')) int.parse(num),
@@ -11,10 +13,10 @@ final boards = [
 ];
 
 void main() {
-  print('Day 4: Part 1: ${day4Part1()} - Part 2: ${day4Part2()}');
+  print('Day $day: Part 1: ${part1()} - Part 2: ${part2()}');
 }
 
-int day4Part1() {
+int part1() {
   for (var num in numbers) {
     var bingos = [
       for (var board in boards)
@@ -27,7 +29,7 @@ int day4Part1() {
   throw StateError('nobody won!');
 }
 
-int day4Part2() {
+int part2() {
   for (var num in numbers) {
     for (var board in boards.toList()) {
       if (board.mark(num)) {

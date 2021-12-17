@@ -1,17 +1,19 @@
 import 'dart:io';
 
+const day = 3;
+
 final day3Values = [
   for (var line in lines)
     if (line.isNotEmpty) int.parse(line, radix: 2),
 ];
 
-final lines = File('lib/day_3_input.txt').readAsLinesSync();
+final lines = File('lib/day_${day}_input.txt').readAsLinesSync();
 
 void main() {
-  print('Day 3: Part 1: ${day3Part1()} - Part 2: ${day3Part2()}');
+  print('Day $day: Part 1: ${part1()} - Part 2: ${part2()}');
 }
 
-int day3Part1() {
+int part1() {
   var length = lines.first.length;
 
   var gammaRate = 0;
@@ -26,7 +28,7 @@ int day3Part1() {
   return gammaRate * epsilonRate;
 }
 
-int day3Part2() {
+int part2() {
   var length = lines.first.length;
   var oxygenRating = 0;
   var co2ScrubberRating = 0;
