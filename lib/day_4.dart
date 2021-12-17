@@ -10,6 +10,10 @@ final boards = [
   for (var i = 2; i + 4 < lines.length; i += 6) Board.parse(lines, i),
 ];
 
+void main() {
+  print('Day 4: Part 1: ${day4Part1()} - Part 2: ${day4Part2()}');
+}
+
 int day4Part1() {
   for (var num in numbers) {
     var bingos = [

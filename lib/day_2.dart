@@ -5,6 +5,10 @@ final day2Values = [
     if (line.isNotEmpty) Command.parse(line),
 ];
 
+void main() {
+  print('Day 2: Part 1: ${day2Part1()} - Part 2: ${day2Part2()}');
+}
+
 int day2Part1() {
   var movement = 0;
   var depth = 0;

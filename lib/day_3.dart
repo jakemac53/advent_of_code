@@ -7,6 +7,10 @@ final day3Values = [
 
 final lines = File('lib/day_3_input.txt').readAsLinesSync();
 
+void main() {
+  print('Day 3: Part 1: ${day3Part1()} - Part 2: ${day3Part2()}');
+}
+
 int day3Part1() {
   var length = lines.first.length;
 

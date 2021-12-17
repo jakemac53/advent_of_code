@@ -5,6 +5,10 @@ final day1Values = [
     if (line.isNotEmpty) int.parse(line),
 ];
 
+void main() {
+  print('Day 1: Part 1: ${day1Part1()} - Part 2: ${day1Part2()}');
+}
+
 int day1Part1() {
   int sum(int index) =>
       day1Values[index] + day1Values[index + 1] + day1Values[index + 2];
