@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'util.dart';
+
 const day = 9;
 
 final lines = File('lib/day_${day}_input.txt').readAsLinesSync()
@@ -101,10 +103,4 @@ class Coord {
       other is Coord && other.row == row && other.col == col;
 
   int get hashCode => Object.hash(row, col);
-}
-
-extension _chars on String {
-  List<String> get chars => [
-        for (var c = 0; c < length; c++) this[c],
-      ];
 }
