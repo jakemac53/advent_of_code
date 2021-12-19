@@ -59,8 +59,8 @@ int solveLine(List<String> inputs, List<String> outputs) {
   late Set<String> zero;
   late Set<String> two;
   late Set<String> three;
-  late Set<String> five;
-  late Set<String> six;
+  // late Set<String> five;
+  // late Set<String> six;
   late Set<String> nine;
 
   for (var sequence in inputs) {
@@ -70,7 +70,7 @@ int solveLine(List<String> inputs, List<String> outputs) {
       if (chars.containsAll(one)) {
         three = chars;
       } else if (chars.intersection(four).length == 3) {
-        five = chars;
+        // five = chars;
       } else {
         two = chars;
       }
@@ -84,7 +84,7 @@ int solveLine(List<String> inputs, List<String> outputs) {
           zero = chars;
         }
       } else {
-        six = chars;
+        // six = chars;
       }
     }
   }
