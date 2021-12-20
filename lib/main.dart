@@ -12,6 +12,7 @@ import 'day_11.dart' as day11;
 import 'day_12.dart' as day12;
 import 'day_13.dart' as day13;
 import 'day_14.dart' as day14;
+import 'day_15.dart' as day15;
 
 void main() async {
   day1.main();
@@ -28,4 +29,5 @@ void main() async {
   day12.main();
   day13.main();
   day14.main();
+  day15.main();
 }
