@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'util.dart';
-
 const day = 12;
 
 final lines = File('lib/day_${day}_input.txt').readAsLinesSync()
