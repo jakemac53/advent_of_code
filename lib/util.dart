@@ -16,3 +16,9 @@ class Coord {
 
   int get hashCode => Object.hash(row, col);
 }
+
+extension DeepCopy on List {
+  List deepCopy() => [
+        for (var item in this) item is List ? item.deepCopy() : item,
+      ];
+}
