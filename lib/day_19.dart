@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 
 const day = 19;
@@ -16,6 +17,7 @@ final scanners = () {
       current.add(Coord.parse(line));
     }
   }
+  scanners.add(Scanner(current));
   return scanners;
 }();
 
@@ -24,25 +26,43 @@ void main() {
 }
 
 int part1() {
-  var found = <Scanner>{scanners.first};
-  for (var scannerA in scanners) {
+  /// Compute the offsets for all scanners from the first scanner.
+  var first = scanners.first;
+  first.rootTranslation = Coord(0, 0, 0);
+  first.rootRotation = identity;
+  var found = <Scanner>{first};
+  var queue = Queue.of([first]);
+  while (queue.isNotEmpty) {
+    var scannerA = queue.removeFirst();
     for (var s = 0; s < scanners.length; s++) {
       var scannerB = scanners[s];
       if (scannerA == scannerB || found.contains(scannerB)) continue;
 
       searchScanners:
-      for (var translation in translations) {
+      for (var rotation in rotations) {
         for (var i = 0; i < scannerA.offsets.length; i++) {
-          var firstOffsets = scannerA.offsets[i].toSet();
+          var beaconOffsetsA = {
+            for (var offset in scannerA.offsets[i])
+              multiplyCoord(scannerA.rootRotation!, offset)
+          };
           for (var j = 0; j < scannerB.offsets.length; j++) {
-            var otherOffsets = {
+            var beaconOffsetsB = {
               for (var offset in scannerB.offsets[j])
-                Coord.fromVector(multiplyVector(translation, offset.vector)),
+                multiplyCoord(rotation, offset),
             };
-            if (firstOffsets.intersection(otherOffsets).length >= 11) {
-              print(
-                  'Found a match for scanner ${scanners.indexOf(scannerA)} at $s!');
+            var intersection = beaconOffsetsA.intersection(beaconOffsetsB);
+            if (intersection.length >= 11) {
+              var rotatedBeacon = multiplyCoord(rotation, scannerB.beacons[j]);
+              var rootBeacon =
+                  multiplyCoord(scannerA.rootRotation!, scannerA.beacons[i]);
+              var rootTranslation =
+                  rotatedBeacon - rootBeacon + scannerA.rootTranslation!;
+              scannerB.rootTranslation = rootTranslation;
+              scannerB.rootRotation =
+                  multiplyMatrix(scannerA.rootRotation!, rotation);
+
               found.add(scannerB);
+              queue.add(scannerB);
               break searchScanners;
             }
           }
@@ -50,7 +70,17 @@ int part1() {
       }
     }
   }
-  return 0;
+
+  var allBeacons = {
+    for (var scanner in scanners)
+      for (var beacon in scanner.beacons)
+        multiplyCoord(scanner.rootRotation!, beacon) + scanner.rootTranslation!,
+  }.toList()
+    ..sort((a, b) => a.x - b.x);
+  for (var beacon in allBeacons) {
+    print(beacon);
+  }
+  return allBeacons.length;
 }
 
 int part2() {
@@ -63,6 +93,12 @@ class Scanner {
   late final List<List<Coord>> offsets = [
     for (var beacon in beacons) beaconOffsets(beacon, this),
   ];
+
+  /// Offset from scanner 0 (after rotation).
+  Coord? rootTranslation;
+
+  /// Rotation matrix to face the same direction as scanner 0;
+  List<List<int>>? rootRotation;
 
   Scanner(this.beacons);
 }
@@ -104,26 +140,34 @@ class Coord {
   bool operator ==(other) =>
       other is Coord && other.x == x && other.y == y && other.z == z;
 
+  Coord operator +(Coord other) => Coord(x + other.x, y + other.y, z + other.z);
+  Coord operator -(Coord other) => Coord(x - other.x, y - other.y, z - other.z);
+
   String toString() => '($x,$y,$z)';
 }
 
 /// All 24 possible matrix translations for a given coordinate.
-final List<List<List<int>>> translations = [
+final List<List<List<int>>> rotations = [
   for (var direction in [identity, x90, x180, x270, y90, y270])
     for (var orientation in [identity, z90, z180, z270])
       multiplyMatrix(orientation, direction),
 ];
 
+var cached = <List<List<int>>, Map<Coord, Coord>>{};
+
 /// multiplies [matrix] by [vector].
-List<int> multiplyVector(List<List<int>> matrix, List<int> vector) {
-  assert(matrix.first.length == vector.length);
-  return List.generate(vector.length, (r) {
-    var row = matrix[r];
-    var total = 0;
-    for (var c = 0; c < row.length; c++) {
-      total += row[c] * vector[c];
-    }
-    return total;
+Coord multiplyCoord(List<List<int>> matrix, Coord coord) {
+  return cached.putIfAbsent(matrix, () => {}).putIfAbsent(coord, () {
+    var vector = coord.vector;
+    assert(matrix.first.length == vector.length);
+    return Coord.fromVector(List.generate(vector.length, (r) {
+      var row = matrix[r];
+      var total = 0;
+      for (var c = 0; c < row.length; c++) {
+        total += row[c] * vector[c];
+      }
+      return total;
+    }));
   });
 }
 
