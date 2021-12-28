@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:io';
+import 'dart:math' as math;
 
 const day = 19;
 
@@ -22,10 +23,37 @@ final scanners = () {
 }();
 
 void main() {
+  computeScannerPositions();
   print('Day $day: Part 1: ${part1()} - Part 2: ${part2()}');
 }
 
 int part1() {
+  var allBeacons = {
+    for (var scanner in scanners)
+      for (var beacon in scanner.beacons)
+        multiplyCoord(
+                scanner.rootRotations.reversed.reduce(multiplyMatrix), beacon) -
+            scanner.rootTranslation!,
+  };
+  return allBeacons.length;
+}
+
+int part2() {
+  var max = 0;
+  for (var i = 0; i < scanners.length; i++) {
+    for (var j = i + 1; j < scanners.length; j++) {
+      var a = scanners[i].rootTranslation!;
+      var b = scanners[j].rootTranslation!;
+      var xDiff = (a.x > b.x ? a.x - b.x : b.x - a.x).abs();
+      var yDiff = (a.y > b.y ? a.y - b.y : b.y - a.y).abs();
+      var zDiff = (a.z > b.z ? a.z - b.z : b.z - a.z).abs();
+      max = math.max(max, xDiff + yDiff + zDiff);
+    }
+  }
+  return max;
+}
+
+void computeScannerPositions() {
   /// Compute the offsets for all scanners from the first scanner.
   var first = scanners.first;
   first.rootTranslation = Coord(0, 0, 0);
@@ -75,19 +103,6 @@ int part1() {
       }
     }
   }
-
-  var allBeacons = {
-    for (var scanner in scanners)
-      for (var beacon in scanner.beacons)
-        multiplyCoord(
-                scanner.rootRotations.reversed.reduce(multiplyMatrix), beacon) -
-            scanner.rootTranslation!,
-  };
-  return allBeacons.length;
-}
-
-int part2() {
-  return 0;
 }
 
 class Scanner {
