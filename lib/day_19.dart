@@ -57,16 +57,14 @@ int part1() {
               var rotatedBeacon =
                   multiplyCoord(computedRotation, scannerB.beacons[j]);
               var rootBeacon = multiplyCoord(
-                  scannerA.rootRotations.reversed.reduce(multiplyMatrix),
-                  scannerA.beacons[i]);
-              var rootTranslation =
-                  rotatedBeacon - rootBeacon + scannerA.rootTranslation!;
-              print(
-                  'matched scanner ${scanners.indexOf(scannerA)} with $s: $rootTranslation');
+                      scannerA.rootRotations.reversed.reduce(multiplyMatrix),
+                      scannerA.beacons[i]) -
+                  scannerA.rootTranslation!;
+              var rootTranslation = rotatedBeacon - rootBeacon;
+              // print(
+              //     'matched scanner ${scanners.indexOf(scannerA)} with $s: $rootTranslation');
               scannerB.rootTranslation = rootTranslation;
-              scannerB.rootRotations
-                ..addAll(scannerA.rootRotations)
-                ..addAll(rotation);
+              scannerB.rootRotations..addAll(rotation);
 
               found.add(scannerB);
               queue.add(scannerB);
@@ -82,13 +80,9 @@ int part1() {
     for (var scanner in scanners)
       for (var beacon in scanner.beacons)
         multiplyCoord(
-                scanner.rootRotations.reversed.reduce(multiplyMatrix), beacon) +
+                scanner.rootRotations.reversed.reduce(multiplyMatrix), beacon) -
             scanner.rootTranslation!,
-  }.toList()
-    ..sort((a, b) => a.x - b.x);
-  for (var beacon in allBeacons) {
-    print(beacon);
-  }
+  };
   return allBeacons.length;
 }
 
