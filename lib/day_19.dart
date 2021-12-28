@@ -29,7 +29,6 @@ int part1() {
   /// Compute the offsets for all scanners from the first scanner.
   var first = scanners.first;
   first.rootTranslation = Coord(0, 0, 0);
-  first.rootRotation = identity;
   var found = <Scanner>{first};
   var queue = Queue.of([first]);
   while (queue.isNotEmpty) {
@@ -40,26 +39,34 @@ int part1() {
 
       searchScanners:
       for (var rotation in rotations) {
+        var computedRotation = rotation.reversed.reduce(multiplyMatrix);
         for (var i = 0; i < scannerA.offsets.length; i++) {
           var beaconOffsetsA = {
             for (var offset in scannerA.offsets[i])
-              multiplyCoord(scannerA.rootRotation!, offset)
+              multiplyCoord(
+                  scannerA.rootRotations.reversed.reduce(multiplyMatrix),
+                  offset),
           };
           for (var j = 0; j < scannerB.offsets.length; j++) {
             var beaconOffsetsB = {
               for (var offset in scannerB.offsets[j])
-                multiplyCoord(rotation, offset),
+                multiplyCoord(computedRotation, offset),
             };
             var intersection = beaconOffsetsA.intersection(beaconOffsetsB);
             if (intersection.length >= 11) {
-              var rotatedBeacon = multiplyCoord(rotation, scannerB.beacons[j]);
-              var rootBeacon =
-                  multiplyCoord(scannerA.rootRotation!, scannerA.beacons[i]);
+              var rotatedBeacon =
+                  multiplyCoord(computedRotation, scannerB.beacons[j]);
+              var rootBeacon = multiplyCoord(
+                  scannerA.rootRotations.reversed.reduce(multiplyMatrix),
+                  scannerA.beacons[i]);
               var rootTranslation =
                   rotatedBeacon - rootBeacon + scannerA.rootTranslation!;
+              print(
+                  'matched scanner ${scanners.indexOf(scannerA)} with $s: $rootTranslation');
               scannerB.rootTranslation = rootTranslation;
-              scannerB.rootRotation =
-                  multiplyMatrix(scannerA.rootRotation!, rotation);
+              scannerB.rootRotations
+                ..addAll(scannerA.rootRotations)
+                ..addAll(rotation);
 
               found.add(scannerB);
               queue.add(scannerB);
@@ -74,7 +81,9 @@ int part1() {
   var allBeacons = {
     for (var scanner in scanners)
       for (var beacon in scanner.beacons)
-        multiplyCoord(scanner.rootRotation!, beacon) + scanner.rootTranslation!,
+        multiplyCoord(
+                scanner.rootRotations.reversed.reduce(multiplyMatrix), beacon) +
+            scanner.rootTranslation!,
   }.toList()
     ..sort((a, b) => a.x - b.x);
   for (var beacon in allBeacons) {
@@ -97,8 +106,8 @@ class Scanner {
   /// Offset from scanner 0 (after rotation).
   Coord? rootTranslation;
 
-  /// Rotation matrix to face the same direction as scanner 0;
-  List<List<int>>? rootRotation;
+  /// All rotations in order to be applied from the root.
+  final rootRotations = <List<List<int>>>[identity];
 
   Scanner(this.beacons);
 }
@@ -147,17 +156,17 @@ class Coord {
 }
 
 /// All 24 possible matrix translations for a given coordinate.
-final List<List<List<int>>> rotations = [
+List<List<List<List<int>>>> rotations = [
   for (var direction in [identity, x90, x180, x270, y90, y270])
     for (var orientation in [identity, z90, z180, z270])
-      multiplyMatrix(orientation, direction),
+      [direction, orientation],
 ];
 
-var cached = <List<List<int>>, Map<Coord, Coord>>{};
+var _coordCache = <List<List<int>>, Map<Coord, Coord>>{};
 
 /// multiplies [matrix] by [vector].
 Coord multiplyCoord(List<List<int>> matrix, Coord coord) {
-  return cached.putIfAbsent(matrix, () => {}).putIfAbsent(coord, () {
+  return _coordCache.putIfAbsent(matrix, () => {}).putIfAbsent(coord, () {
     var vector = coord.vector;
     assert(matrix.first.length == vector.length);
     return Coord.fromVector(List.generate(vector.length, (r) {
@@ -171,20 +180,24 @@ Coord multiplyCoord(List<List<int>> matrix, Coord coord) {
   });
 }
 
+var _matrixCache = <List<List<int>>, Map<List<List<int>>, List<List<int>>>>{};
+
 /// multiplies two NxN matrices.
 List<List<int>> multiplyMatrix(List<List<int>> a, List<List<int>> b) {
   assert(a.length == b.length);
   assert(a.first.length == a.length);
   assert(a.first.length == b.first.length);
-  return List.generate(
-      a.length,
-      (r) => List.generate(a.length, (c) {
-            var total = 0;
-            for (var i = 0; i < a.length; i++) {
-              total += a[r][i] * b[i][c];
-            }
-            return total;
-          }));
+  return _matrixCache.putIfAbsent(a, () => {}).putIfAbsent(b, () {
+    return List.generate(
+        a.length,
+        (r) => List.generate(a.length, (c) {
+              var total = 0;
+              for (var i = 0; i < a.length; i++) {
+                total += a[r][i] * b[i][c];
+              }
+              return total;
+            }));
+  });
 }
 
 const cos90 = 0;
