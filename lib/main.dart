@@ -18,7 +18,8 @@ import 'day_17.dart' as day17;
 import 'day_18.dart' as day18;
 // import 'day_19.dart' as day19;
 import 'day_20.dart' as day20;
-import 'day_21.dart' as day21;
+// import 'day_21.dart' as day21;
+// import 'day_22.dart' as day22;
 
 void main() async {
   day1.main();
@@ -39,7 +40,8 @@ void main() async {
   day16.main();
   day17.main();
   day18.main();
-  // day19.main(); // this one is pretty slow so only run on demand
+  // day19.main(); // slow
   day20.main();
-  day21.main();
+  // day21.main(); // slow
+  // day22.main(); // slow
 }
