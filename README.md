@@ -1,3 +1,3 @@
-# Advent of code 2021, in Dart
+# Advent of code solutions in Dart
 
-**Note**: I am not striving for perfect or clean solutions, just ones good enough to get the answers :D.
+Just my hacky nonsense, I don't solve all problems or participate in all years.
