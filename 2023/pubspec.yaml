@@ -1,0 +1,6 @@
+name: advent_of_code
+publish_to: none
+environment:
+  sdk: ^3.6.0
+dependencies:
+  collection: ^1.15.0
