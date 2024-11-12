@@ -1,6 +1,6 @@
 name: advent_of_code
 publish_to: none
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
 dependencies:
   collection: ^1.15.0

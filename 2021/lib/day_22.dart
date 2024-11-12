@@ -175,6 +175,7 @@ class Range {
     } else if (other.start >= start && other.start <= end) {
       return Range(other.start, math.min(end, other.end));
     }
+    return null;
   }
 
   bool operator ==(other) =>
