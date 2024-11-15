@@ -1,4 +1,4 @@
-name: advent_of_code
+name: advent_of_code_2021
 publish_to: none
 environment:
   sdk: ">=2.14.0 <3.0.0"
