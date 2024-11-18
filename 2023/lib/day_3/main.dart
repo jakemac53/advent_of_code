@@ -1,6 +1,8 @@
 import 'dart:io';
 
-final input = File('lib/day_3.input.txt').readAsLinesSync();
+final input =
+    File.fromUri(Platform.script.resolve('input.txt')).readAsLinesSync();
+
 const digits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
 void main() {

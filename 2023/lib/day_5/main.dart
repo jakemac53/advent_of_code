@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'dart:math' as math;
 
-final input = File('lib/day_5.input.txt').readAsLinesSync();
+final input =
+    File.fromUri(Platform.script.resolve('input.txt')).readAsLinesSync();
 
 void main() {
   // Part 1

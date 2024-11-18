@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 
-final input = File('lib/day_2.input.txt').readAsLinesSync();
+final input =
+    File.fromUri(Platform.script.resolve('input.txt')).readAsLinesSync();
 
 void main() {
   // Game => Selections => color : amount

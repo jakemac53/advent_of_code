@@ -1,6 +1,7 @@
 import 'dart:io';
 
-final input = File('lib/day_6.input.txt').readAsLinesSync();
+final input =
+    File.fromUri(Platform.script.resolve('input.txt')).readAsLinesSync();
 
 typedef Range = (int, int);
 

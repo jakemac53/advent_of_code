@@ -1,6 +1,7 @@
 import 'dart:io';
 
-final input = File('lib/day_1.input.txt').readAsLinesSync();
+final input =
+    File.fromUri(Platform.script.resolve('input.txt')).readAsLinesSync();
 
 void main() {
   var sum = 0;

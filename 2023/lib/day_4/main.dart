@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'dart:math' as math;
 
-final input = File('lib/day_4.input.txt').readAsLinesSync()
+final input = File.fromUri(Platform.script.resolve('input.txt'))
+    .readAsLinesSync()
   ..removeWhere((l) => l.isEmpty);
 
 void main() {
