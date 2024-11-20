@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import '../util.dart';
+
 final input =
     File.fromUri(Platform.script.resolve('input.txt')).readAsLinesSync();
 
@@ -48,13 +50,4 @@ void main() {
     var possiblities = solve((0, time), time, distance);
     print('part 2: ${possiblities.end - possiblities.start + 1} $possiblities');
   }
-}
-
-extension on String {
-  List<int> readNumbers([String prefix = '']) => [
-        for (var seed
-            in substring(prefix.length).split(' ')
-              ..removeWhere((s) => s.isEmpty))
-          int.parse(seed),
-      ];
 }

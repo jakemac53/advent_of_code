@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:math' as math;
 
+import '../util.dart';
+
 final input =
     File.fromUri(Platform.script.resolve('input.txt')).readAsLinesSync();
 
@@ -114,13 +116,6 @@ void main() {
 }
 
 extension on String {
-  List<int> readNumbers([String prefix = '']) => [
-        for (var seed
-            in substring(prefix.length).split(' ')
-              ..removeWhere((s) => s.isEmpty))
-          int.parse(seed),
-      ];
-
   void readIntoMap(RangeMap map) {
     final [valueStart, keyStart, length] = readNumbers();
     map.ranges.add((
