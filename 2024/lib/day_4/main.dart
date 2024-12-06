@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import '../util.dart';
+
 final input = File.fromUri(Platform.script.resolve('input.txt'))
     .readAsLinesSync()
   ..removeWhere((line) => line.isEmpty);
@@ -69,23 +71,11 @@ bool matchesWord(Point start, Point dir, List<String> word) {
   var current = start;
   for (var c = 1; c < word.length; c++) {
     current += dir;
-    if (!current.isValid || input.find(current) != word[c]) {
+    if (!current.isValid(input) || input.find(current) != word[c]) {
       return false;
     }
   }
   return true;
-}
-
-typedef Point = (int x, int y);
-
-extension on Point {
-  int get x => $1;
-  int get y => $2;
-
-  Point operator +(Point other) => (x + other.x, y + other.y);
-
-  bool get isValid =>
-      x >= 0 && y >= 0 && x < input.first.length && y < input.length;
 }
 
 extension on List<String> {
