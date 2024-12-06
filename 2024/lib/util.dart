@@ -1,7 +1,7 @@
 extension StringUtils on String {
-  List<int> readNumbers([String prefix = '']) => [
+  List<int> readNumbers({String prefix = '', String separator = ' '}) => [
         for (var seed
-            in substring(prefix.length).split(' ')
+            in substring(prefix.length).split(separator)
               ..removeWhere((s) => s.isEmpty))
           int.parse(seed),
       ];
